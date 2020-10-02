@@ -3,6 +3,7 @@ package com.example.thinkanumber;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +21,44 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         init();
+        btnTippel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (gondoltSzam < tippeltSzam){
+                    //TODO: értesítés, hogy a gondolt szám kisebb
+                    eletLevon();
+                } else if (gondoltSzam > tippeltSzam){
+                    //TODO: értesítés, hogy a gondolt szám nagyobb
+                    eletLevon();
+                } else {
+                    //TODO: VICTORY felugró ablak
+                }
+            }
+        });
+        //TODO: Növel és csökkent gombok eseménye
+    }
+
+    private void eletLevon() {
+        switch (elet){
+            case 4:
+                imageHp4.setImageResource(R.drawable.heart1);
+                break;
+            case 3:
+                imageHp3.setImageResource(R.drawable.heart1);
+                break;
+            case 2:
+                imageHp2.setImageResource(R.drawable.heart1);
+                break;
+            case 1:
+                imageHp1.setImageResource(R.drawable.heart1);
+                break;
+            default:
+                break;
+        }
+        elet--;
+        if (elet < 1){
+            //TODO: GAME OVER felugró ablak
+        }
     }
 
     private void init() {
