@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnNovel, btnCsokkent, btnTippel;
     private int gondoltSzam, tippeltSzam, elet;
     private AlertDialog.Builder builder;
+    private Toast customToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         elet--;
+        customToast.show();
         if (elet < 1){
             builder.setTitle("Vesztettél").create().show();
         }
@@ -115,6 +119,10 @@ public class MainActivity extends AppCompatActivity {
                     finish();
                 }
             });
+        customToast = Toast.makeText(MainActivity.this, "", Toast.LENGTH_LONG);
+        customToast.setGravity(Gravity.CENTER, 0,0);
+        customToast.setView(getLayoutInflater().inflate(R.layout.custom_toast,(ViewGroup)findViewById(R.id.custom_toast_layout)));
+
     }
 
     private void ujJatek() {
