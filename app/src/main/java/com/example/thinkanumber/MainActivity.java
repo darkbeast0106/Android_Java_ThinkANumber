@@ -15,12 +15,14 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ImageView imageHp1, imageHp2, imageHp3, imageHp4;
+    private ImageView imageHp1, imageHp2, imageHp3, imageHp4, imageHp5;
     private TextView textTippeltSzam;
-    private Button btnNovel, btnCsokkent, btnTippel;
+    private Button btnNovel, btnCsokkent, btnTippel, btnKonnyu, btnNehez;
     private int gondoltSzam, tippeltSzam, elet;
-    private AlertDialog.Builder builder;
+    private AlertDialog.Builder builderVege, builderNehezseg;
     private Toast customToast;
+    private int maxSzam;
+    private boolean nehezseg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +37,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (gondoltSzam < tippeltSzam){
-                    Toast.makeText(MainActivity.this, "A gondolt szám kisebb", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,
+                            "A gondolt szám kisebb", Toast.LENGTH_SHORT).show();
                     eletLevon();
                 } else if (gondoltSzam > tippeltSzam){
-                    Toast.makeText(MainActivity.this, "A gondolt szám nagyobb", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,
+                            "A gondolt szám nagyobb", Toast.LENGTH_SHORT).show();
                     eletLevon();
                 } else {
-                    builder.setTitle("Győzelem");
-                    AlertDialog dialog = builder.create();
+                    builderVege.setTitle("Győzelem");
+                    AlertDialog dialog = builderVege.create();
                     dialog.show();
                 }
             }
@@ -50,11 +54,12 @@ public class MainActivity extends AppCompatActivity {
         btnNovel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (tippeltSzam < 10){
+                if (tippeltSzam < maxSzam){
                     tippeltSzam++;
                     textTippeltSzam.setText(tippeltSzam+"");
                 }else{
-                    Toast.makeText(MainActivity.this, "A szám nem lehet nagyobb mint 10", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,
+                            "A szám nem lehet nagyobb mint 10", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -65,15 +70,35 @@ public class MainActivity extends AppCompatActivity {
                     tippeltSzam--;
                     textTippeltSzam.setText(String.valueOf(tippeltSzam));
                 }else{
-                    Toast.makeText(MainActivity.this, "A szám nem lehet kisebb mint 1", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,
+                            "A szám nem lehet kisebb mint 1", Toast.LENGTH_SHORT).show();
                 }
 
+            }
+        });
+
+        btnKonnyu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nehezseg = false;
+                builderNehezseg.create().show();
+            }
+        });
+
+        btnNehez.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nehezseg = true;
+                builderNehezseg.create().show();
             }
         });
     }
 
     private void eletLevon() {
         switch (elet){
+            case 5:
+                imageHp5.setImageResource(R.drawable.heart1);
+                break;
             case 4:
                 imageHp4.setImageResource(R.drawable.heart1);
                 break;
@@ -90,9 +115,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         elet--;
-        customToast.show();
+        //customToast.show();
         if (elet < 1){
-            builder.setTitle("Vesztettél").create().show();
+            builderVege.setTitle("Vesztettél").create().show();
         }
     }
 
@@ -101,12 +126,15 @@ public class MainActivity extends AppCompatActivity {
         imageHp2 = findViewById(R.id.image_hp2);
         imageHp3 = findViewById(R.id.image_hp3);
         imageHp4 = findViewById(R.id.image_hp4);
+        imageHp5 = findViewById(R.id.image_hp5);
         textTippeltSzam = findViewById(R.id.text_tippelt_szam);
         btnNovel = findViewById(R.id.btn_novel);
         btnCsokkent = findViewById(R.id.btn_csokkent);
         btnTippel = findViewById(R.id.btn_tipp);
-        builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setCancelable(false).setMessage("Szeretne új játékot játszani?")
+        btnKonnyu = findViewById(R.id.btn_konnyu);
+        btnNehez = findViewById(R.id.btn_nehez);
+        builderVege = new AlertDialog.Builder(MainActivity.this);
+        builderVege.setCancelable(false).setMessage("Szeretne új játékot játszani?")
             .setPositiveButton("Igen", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -119,21 +147,54 @@ public class MainActivity extends AppCompatActivity {
                     finish();
                 }
             });
+        builderNehezseg = new AlertDialog.Builder(MainActivity.this);
+        builderNehezseg.setCancelable(false).setTitle("Nehézség váltása")
+                .setMessage("Biztosan új játékot kezd a kiválasztott nehézséggel?")
+                .setPositiveButton("Igen", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        nehezsegAllit();
+                    }
+                })
+                .setNegativeButton("Nem", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
         customToast = Toast.makeText(MainActivity.this, "", Toast.LENGTH_LONG);
         customToast.setGravity(Gravity.CENTER, 0,0);
         customToast.setView(getLayoutInflater().inflate(R.layout.custom_toast,(ViewGroup)findViewById(R.id.custom_toast_layout)));
+        maxSzam = 10;
+        nehezseg = false;
+    }
 
+    private void nehezsegAllit() {
+        if (nehezseg){
+            maxSzam = 40;
+            imageHp4.setVisibility(View.VISIBLE);
+            imageHp5.setVisibility(View.VISIBLE);
+        }else{
+            maxSzam = 10;
+            imageHp4.setVisibility(View.GONE);
+            imageHp5.setVisibility(View.GONE);
+        }
+        ujJatek();
     }
 
     private void ujJatek() {
         tippeltSzam = 1;
-        elet = 4;
-        gondoltSzam = (int)(Math.random()*10)+1;
+        elet = 3;
+        if (maxSzam == 40) {
+            elet = 5;
+        }
+        gondoltSzam = (int)(Math.random()*maxSzam)+1;
         textTippeltSzam.setText(String.valueOf(tippeltSzam));
         imageHp1.setImageResource(R.drawable.heart2);
         imageHp2.setImageResource(R.drawable.heart2);
         imageHp3.setImageResource(R.drawable.heart2);
         imageHp4.setImageResource(R.drawable.heart2);
+        imageHp5.setImageResource(R.drawable.heart2);
 
     }
 
