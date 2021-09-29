@@ -16,6 +16,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     private ImageView imageHp1, imageHp2, imageHp3, imageHp4, imageHp5;
+    private ImageView[] eletek;
     private TextView textTippeltSzam;
     private Button btnNovel, btnCsokkent, btnTippel, btnKonnyu, btnNehez;
     private int gondoltSzam, tippeltSzam, elet;
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (tippeltSzam < maxSzam){
                     tippeltSzam++;
-                    textTippeltSzam.setText(tippeltSzam+"");
+                    textTippeltSzam.setText(""+tippeltSzam);
                 }else{
                     Toast.makeText(MainActivity.this,
                             "A szám nem lehet nagyobb mint 10", Toast.LENGTH_SHORT).show();
@@ -95,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void eletLevon() {
+        /*
         switch (elet){
             case 5:
                 imageHp5.setImageResource(R.drawable.heart1);
@@ -114,7 +116,9 @@ public class MainActivity extends AppCompatActivity {
             default:
                 break;
         }
+         */
         elet--;
+        eletek[elet].setImageResource(R.drawable.heart1);
         //customToast.show();
         if (elet < 1){
             builderVege.setTitle("Vesztettél").create().show();
@@ -133,6 +137,8 @@ public class MainActivity extends AppCompatActivity {
         btnTippel = findViewById(R.id.btn_tipp);
         btnKonnyu = findViewById(R.id.btn_konnyu);
         btnNehez = findViewById(R.id.btn_nehez);
+        eletek = new ImageView[]{imageHp1,imageHp2,imageHp3,imageHp4,imageHp5};
+
         builderVege = new AlertDialog.Builder(MainActivity.this);
         builderVege.setCancelable(false).setMessage("Szeretne új játékot játszani?")
             .setPositiveButton("Igen", new DialogInterface.OnClickListener() {
@@ -190,12 +196,16 @@ public class MainActivity extends AppCompatActivity {
         }
         gondoltSzam = (int)(Math.random()*maxSzam)+1;
         textTippeltSzam.setText(String.valueOf(tippeltSzam));
+        /*
         imageHp1.setImageResource(R.drawable.heart2);
         imageHp2.setImageResource(R.drawable.heart2);
         imageHp3.setImageResource(R.drawable.heart2);
         imageHp4.setImageResource(R.drawable.heart2);
         imageHp5.setImageResource(R.drawable.heart2);
-
+         */
+        for (ImageView elet: eletek) {
+            elet.setImageResource(R.drawable.heart2);
+        }
     }
 
 
